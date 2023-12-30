@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BakeAtlas.Api", "BakeAtlas.Api\BakeAtlas.Api.csproj", "{F6A5D358-9E76-400E-AE9C-5F01290300C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BakeAtlas.Persistence", "BakeAtlas\BakeAtlas.Persistence.csproj", "{D254DB19-2F34-43DD-8DE5-B5EDE1C6C08C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BakeAtlas.Application", "BakeAtlas.Application\BakeAtlas.Application.csproj", "{63B3C390-6FFC-4C7A-A5DE-163271F92C79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F6A5D358-9E76-400E-AE9C-5F01290300C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6A5D358-9E76-400E-AE9C-5F01290300C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6A5D358-9E76-400E-AE9C-5F01290300C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6A5D358-9E76-400E-AE9C-5F01290300C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D254DB19-2F34-43DD-8DE5-B5EDE1C6C08C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D254DB19-2F34-43DD-8DE5-B5EDE1C6C08C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D254DB19-2F34-43DD-8DE5-B5EDE1C6C08C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D254DB19-2F34-43DD-8DE5-B5EDE1C6C08C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63B3C390-6FFC-4C7A-A5DE-163271F92C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63B3C390-6FFC-4C7A-A5DE-163271F92C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63B3C390-6FFC-4C7A-A5DE-163271F92C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63B3C390-6FFC-4C7A-A5DE-163271F92C79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCC60D20-66D2-4C82-994D-39D0CCE045BA}
+	EndGlobalSection
+EndGlobal
