@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BakeAtlas.Domain.Entities
 {
-    public class BakeryProduct
+    public class BakeryProduct :BaseEntity
     {
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }

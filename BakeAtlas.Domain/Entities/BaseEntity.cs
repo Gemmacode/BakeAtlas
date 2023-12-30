@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace BakeAtlas.Domain.Entities
 {
-    internal class BaseEntity
+    public class BaseEntity
     {
+        public string Id { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
