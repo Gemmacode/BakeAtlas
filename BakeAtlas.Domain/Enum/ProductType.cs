@@ -12,5 +12,6 @@ namespace BakeAtlas.Domain.Enum
         Pastry,
         Cookie,
         Bread,
+        SmallChops
     }
 }
