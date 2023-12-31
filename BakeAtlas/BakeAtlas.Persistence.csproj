@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BakeAtlas.Application\BakeAtlas.Application.csproj" />
     <ProjectReference Include="..\BakeAtlas.Domain\BakeAtlas.Domain.csproj" />
   </ItemGroup>
 

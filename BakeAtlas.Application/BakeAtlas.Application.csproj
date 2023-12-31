@@ -16,4 +16,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Implementation\ServiceImplementation\" />
+    <Folder Include="Interface\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BakeAtlas.Domain\BakeAtlas.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
