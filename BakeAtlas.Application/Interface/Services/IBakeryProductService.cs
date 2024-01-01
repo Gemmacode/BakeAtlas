@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BakeAtlas.Domain.Entities;
 
 namespace BakeAtlas.Application.Interface.Services
 {
-    internal interface IBakeryProductService
+    public interface IBakeryProductService
     {
+        void AddProduct(BakeryProduct product);
+        void DeleteProduct(int productId);
+        List<BakeryProduct> GetAllProducts();
+        BakeryProduct GetProductById(string productId);
+        void UpdateProduct(BakeryProduct product);
     }
 }

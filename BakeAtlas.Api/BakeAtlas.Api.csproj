@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BakeAtlas.Application\BakeAtlas.Application.csproj" />
     <ProjectReference Include="..\BakeAtlas.Domain\BakeAtlas.Domain.csproj" />
     <ProjectReference Include="..\BakeAtlas\BakeAtlas.Persistence.csproj" />

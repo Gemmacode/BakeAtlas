@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ServicesImplementation\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BakeAtlas.Domain\BakeAtlas.Domain.csproj" />
   </ItemGroup>
 
