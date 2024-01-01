@@ -14,7 +14,6 @@ namespace BakeAtlas.Application.Interface.Repositories
         void AddCustomerAsync(Customer customer);
         void DeleteCustomerAsync(Customer customer);
         void DeleteAllCustomersAsync(List<Customer> customers);
-        public List<Customer> FindCustomerAsync(Expression<Func<Customer, bool>> condition);
         Customer GetCustomerById(string id);
         void UpdateCustomerAsync(Customer student);
     }

@@ -29,29 +29,19 @@ namespace BakeAtlas.Persistence.Repositories
             DeleteAsync(order);
         }
 
-        public List<Order> FindOrderAsync(Expression<Func<Order, bool>> condition)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Order> GetAllOrder(Expression<Func<Order, bool>> customerid)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<Order> GetOrderAsync()
         {
-            throw new NotImplementedException();
+            return GetAllAsync();
         }
 
         public Order GetOrderById(string id)
         {
-            throw new NotImplementedException();
+            return GetByIdAsync(id);
         }
 
         public void UpdateOrderAsync(Order order)
         {
-            throw new NotImplementedException();
+            _context.Update(order);
         }
     }
 }

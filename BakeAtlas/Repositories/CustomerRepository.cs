@@ -26,32 +26,27 @@ namespace BakeAtlas.Persistence.Repositories
 
         public void DeleteAllCustomersAsync(List<Customer> customers)
         {
-            throw new NotImplementedException();
+            DeleteAllAsync(customers);   
         }
 
         public void DeleteCustomerAsync(Customer customer)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<Customer> FindCustomerAsync(Expression<Func<Customer, bool>> condition)
-        {
-            throw new NotImplementedException();
+           DeleteAsync(customer);
         }
 
         public Customer GetCustomerById(string id)
         {
-            throw new NotImplementedException();
+            return GetByIdAsync(id);
         }
 
         public List<Customer> GetCustomersAsync()
         {
-            throw new NotImplementedException();
+            return GetAllAsync();
         }
 
         public void UpdateCustomerAsync(Customer student)
         {
-            throw new NotImplementedException();
+             UpdateAsync(student);
         }
     }
 }

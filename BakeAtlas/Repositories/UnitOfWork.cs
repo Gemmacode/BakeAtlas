@@ -31,13 +31,8 @@ namespace BakeAtlas.Persistence.Repositories
 
         public int SaveChanges()
         {
-            throw new NotImplementedException();
-        }
-
-        public int SaveChangesAync()
-        {
             return _dbContext.SaveChanges();
-
         }
+
     }
 }

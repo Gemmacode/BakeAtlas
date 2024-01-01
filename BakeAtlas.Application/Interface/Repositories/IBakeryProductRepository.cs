@@ -11,11 +11,11 @@ namespace BakeAtlas.Application.Interface.Repositories
     public interface IBakeryProductRepository : IGenericRepository<BakeryProduct>
     {
         List<BakeryProduct> GetBakeryProductAsync();
-        List<BakeryProduct> GetAllBakeryProduct(Expression<Func<BakeryProduct, bool>> customerid);
+        //List<BakeryProduct> GetAllBakeryProduct(Expression<Func<BakeryProduct, bool>> customerid);
         void AddBakeryProductAsync(BakeryProduct bakeryProduct);
         void DeleteBakeryProductAsync(BakeryProduct bakeryProduct);
-        //void DeleteAllBakeryProductsAsync(List<BakeryProduct> bakeryProducts);
-        public List<BakeryProduct> FindBakeryProductAsync(Expression<Func<BakeryProduct, bool>> condition);
+        void DeleteAllBakeryProductsAsync(List<BakeryProduct> bakeryProducts);
+        //public List<BakeryProduct> FindBakeryProductAsync(Expression<Func<BakeryProduct, bool>> condition);
         BakeryProduct GetBakeryProductById(string id);
         void UpdateBakeryProductAsync(BakeryProduct bakeryProduct);
     }
