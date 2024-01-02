@@ -14,11 +14,6 @@ namespace BakeAtlas.Persistence.Repositories
             AddAsync (bakeryProduct);
         }
 
-        public void DeleteAllBakeryProductsAsync(List<BakeryProduct> bakeryProducts)
-        {
-            DeleteAllAsync(bakeryProducts);
-        }
-
         public void DeleteBakeryProductAsync(BakeryProduct bakeryProduct)
         {
            DeleteAsync (bakeryProduct);

@@ -16,6 +16,13 @@ namespace BakeAtlas.Api.Controllers
             _productService = productService;
         }
 
+        [HttpPost("Add-Product")]
+        public IActionResult AddProduct(BakeryProductDTO product)
+        {
+             _productService.AddProduct(product);
+            return Ok();
+        }
+
         [HttpGet("Get-Products")]
         public IActionResult GetAllProducts()
         {
@@ -29,12 +36,19 @@ namespace BakeAtlas.Api.Controllers
             var product = _productService.GetProductById(id);
             return Ok(product);
         }
-
-        [HttpPost("Add-Product")]
-        public IActionResult AddProduct(BakeryProduct product)
+        
+        [HttpPut("Update-Product")]
+        public IActionResult UpdateProduct(BakeryProductDTO product)
         {
-            _productService.AddProduct(product);
+            _productService.UpdateProduct(product);
             return Ok(product);
+        }
+
+        [HttpDelete("Delete-Product")]
+        public IActionResult DeleteProduct(string id)
+        {
+            _productService.DeleteProduct(id);
+            return Ok();
         }
     }
 }

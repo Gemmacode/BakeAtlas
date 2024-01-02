@@ -4,10 +4,10 @@ namespace BakeAtlas.Application.Interface.Services
 {
     public interface IBakeryProductService
     {
-        void AddProduct(BakeryProduct product);
+        void AddProduct(BakeryProductDTO product);
         void DeleteProduct(string productId);
         List<BakeryProduct> GetAllProducts();
         BakeryProduct GetProductById(string productId);
-        void UpdateProduct(BakeryProduct product);
+        void UpdateProduct(BakeryProductDTO product);
     }
 }

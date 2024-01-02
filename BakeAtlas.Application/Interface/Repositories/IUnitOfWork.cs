@@ -10,7 +10,7 @@ namespace BakeAtlas.Application.Interface.Repositories
     {
         ICustomerRepository CustomerRepository { get; }
         IOrderRepository OrderRepository { get; }
-        IBakeryProductRepository ProductRepository { get; }
+        IBakeryProductRepository BakeryProductRepository { get; }
         int SaveChanges();
     }
 }

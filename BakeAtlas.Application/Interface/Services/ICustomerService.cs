@@ -9,10 +9,10 @@ namespace BakeAtlas.Application.Interface.Services
 {
     public interface ICustomerService
     {
-        void AddCustomer(Customer customer);
+        void AddCustomer(CustomerDTO customer);
         void DeleteCustomer(string customerId);
         List<Customer> GetAllCustomer();
         Customer GetCustomerById(string customerId);
-        void UpdateCustomer(Customer customer);
+        void UpdateCustomer(CustomerDTO customer);
     }
 }

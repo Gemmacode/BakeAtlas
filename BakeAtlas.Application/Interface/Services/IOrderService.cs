@@ -9,10 +9,10 @@ namespace BakeAtlas.Application.Interface.Services
 {
     public interface IOrderService
     {
-        void AddOrder(Order customer);
+        void AddOrder(OrderDTO customer);
         void DeleteOrder(string orderId);
         List<Order> GetAllOrder();
         Order GetOrderById(string orderId);
-        void UpdateOrder(Order order);
+        void UpdateOrder(OrderDTO order);
     }
 }

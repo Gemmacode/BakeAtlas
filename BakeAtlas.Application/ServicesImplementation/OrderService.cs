@@ -10,7 +10,7 @@ namespace BakeAtlas.Application.ServicesImplementation
 {
     public class OrderService : IOrderService
     {
-        public void AddOrder(Order customer)
+        public void AddOrder(OrderDTO customer)
         {
             throw new NotImplementedException();
         }
@@ -30,7 +30,7 @@ namespace BakeAtlas.Application.ServicesImplementation
             throw new NotImplementedException();
         }
 
-        public void UpdateOrder(Order order)
+        public void UpdateOrder(OrderDTO order)
         {
             throw new NotImplementedException();
         }

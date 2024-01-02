@@ -8,37 +8,64 @@ namespace BakeAtlas.Application.ServicesImplementation
     {
        
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IBakeryProductRepository _repository;
+        //private readonly IBakeryProductRepository _repository;
 
-        public BakeryProductService(IUnitOfWork unitOfWork, IBakeryProductRepository repository)
+        public BakeryProductService(IUnitOfWork unitOfWork /* IBakeryProductRepository repository*/)
         {
             _unitOfWork = unitOfWork;
-            _repository = repository;
+            //_repository = repository;
         }
 
         public List<BakeryProduct> GetAllProducts()
         {
-            return  _repository.GetBakeryProductAsync();
+
+            return _unitOfWork.BakeryProductRepository.GetAllAsync();
+            
         }
 
         public BakeryProduct GetProductById(string productId)
         {
-            return _repository.GetByIdAsync(productId);
+
+            return _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);
         }
 
-        public void AddProduct(BakeryProduct product)
+        public void AddProduct(BakeryProductDTO product)
         {
-            _repository.AddBakeryProductAsync(product);
+            var prod = new BakeryProduct
+            {
+                Id = Guid.NewGuid().ToString(),
+                ProductName=product.ProductName,
+                ProductDescription=product.ProductDescription,
+                ProductPrice=product.ProductPrice,
+                ProductQuantity=product.ProductQuantity,
+                ProductDiscount=product.ProductDiscount,
+                ingredients=product.ingredients,
+                UpdatedAt=DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow
+            };
+            _unitOfWork.BakeryProductRepository.AddBakeryProductAsync(prod);
+            _unitOfWork.SaveChanges();
         }
 
-        public void UpdateProduct(BakeryProduct product)
+        public void UpdateProduct(BakeryProductDTO product)
         {
-            _repository.UpdateBakeryProductAsync(product);
+            
+                
         }
 
         public void DeleteProduct(string productId)
         {
-            _repository.DeleteBakeryProductAsync(GetProductById(productId));
+            if (string.IsNullOrWhiteSpace(productId)) 
+            {
+                throw new ArgumentNullException ("Product Id is required");
+            };
+            var product = _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);
+            if (product == null)
+            {
+                throw new Exception("Product not found");
+            }
+            _unitOfWork.BakeryProductRepository.DeleteBakeryProductAsync (product);
+            _unitOfWork.SaveChanges();
         }
     }
 }

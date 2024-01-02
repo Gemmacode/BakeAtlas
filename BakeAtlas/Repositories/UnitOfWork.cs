@@ -13,14 +13,14 @@ namespace BakeAtlas.Persistence.Repositories
             _dbContext = dbContext;
             CustomerRepository = new CustomerRepository (_dbContext);
             OrderRepository = new OrderRepository(_dbContext);
-            ProductRepository = new BakeryProductRepository(_dbContext);
+            BakeryProductRepository = new BakeryProductRepository(_dbContext);
         }
 
         public ICustomerRepository CustomerRepository { get; private set; }
 
         public IOrderRepository OrderRepository { get; private set; }
 
-        public IBakeryProductRepository ProductRepository { get; private set; }
+        public IBakeryProductRepository BakeryProductRepository { get; private set; }
 
         
 

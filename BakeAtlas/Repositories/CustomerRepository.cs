@@ -24,11 +24,6 @@ namespace BakeAtlas.Persistence.Repositories
             AddAsync(customer);
         }
 
-        public void DeleteAllCustomersAsync(List<Customer> customers)
-        {
-            DeleteAllAsync(customers);   
-        }
-
         public void DeleteCustomerAsync(Customer customer)
         {
            DeleteAsync(customer);

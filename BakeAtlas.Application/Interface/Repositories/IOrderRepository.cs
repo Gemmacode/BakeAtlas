@@ -13,7 +13,6 @@ namespace BakeAtlas.Application.Interface.Repositories
         List<Order> GetOrderAsync();
         void AddOrderAsync(Order order);
         void DeleteOrderAsync(Order order);
-        void DeleteAllOrderAsync(List<Order> order);
         Order GetOrderById(string id);
         void UpdateOrderAsync(Order order);
     }

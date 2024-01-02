@@ -18,12 +18,6 @@ namespace BakeAtlas.Persistence.Repositories
         {
             AddAsync(order);
         }
-
-        public void DeleteAllOrderAsync(List<Order> order)
-        {
-            DeleteAllAsync(order);
-        }
-
         public void DeleteOrderAsync(Order order)
         {
             DeleteAsync(order);
