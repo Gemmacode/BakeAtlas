@@ -1,28 +1,24 @@
 ﻿using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BakeAtlas.Application.ServicesImplementation
 {
     public class BakeryProductService : IBakeryProductService
     {
-        //private readonly IGenericRepository<BakeryProduct> _repository;
+       
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IBakeryProductRepository _repository;
 
-        public BakeryProductService(IGenericRepository<BakeryProduct> repository, IUnitOfWork unitOfWork)
+        public BakeryProductService(IUnitOfWork unitOfWork, IBakeryProductRepository repository)
         {
-            //_repository = repository;
             _unitOfWork = unitOfWork;
+            _repository = repository;
         }
 
         public List<BakeryProduct> GetAllProducts()
         {
-            return GetAllProducts();
+            return  _repository.GetBakeryProductAsync();
         }
 
         public BakeryProduct GetProductById(string productId)
@@ -32,17 +28,17 @@ namespace BakeAtlas.Application.ServicesImplementation
 
         public void AddProduct(BakeryProduct product)
         {
-            _repository.Insert(product);
+            _repository.AddBakeryProductAsync(product);
         }
 
         public void UpdateProduct(BakeryProduct product)
         {
-            _repository.Update(product);
+            _repository.UpdateBakeryProductAsync(product);
         }
 
-        public void DeleteProduct(int productId)
+        public void DeleteProduct(string productId)
         {
-            _repository.Delete(productId);
+            _repository.DeleteBakeryProductAsync(GetProductById(productId));
         }
     }
 }
