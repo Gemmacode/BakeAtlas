@@ -13,6 +13,6 @@ namespace BakeAtlas.Application.Interface.Services
         void DeleteOrder(string orderId);
         List<Order> GetAllOrder();
         Order GetOrderById(string orderId);
-        void UpdateOrder(OrderDTO order);
+        void UpdateOrder(string orderid, OrderDTO order);
     }
 }

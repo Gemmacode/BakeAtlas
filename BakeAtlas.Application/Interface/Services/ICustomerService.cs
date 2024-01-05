@@ -13,6 +13,6 @@ namespace BakeAtlas.Application.Interface.Services
         void DeleteCustomer(string customerId);
         List<Customer> GetAllCustomer();
         Customer GetCustomerById(string customerId);
-        void UpdateCustomer(CustomerDTO customer);
+        void UpdateCustomer(string customerid, CustomerDTO customer);
     }
 }

@@ -17,10 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<ICustomerService, CustomerService>();
-builder.Services.AddSingleton<IOrderService, OrderService>();
-builder.Services.AddSingleton<IBakeryProductService, BakeryProductService>();
-builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddIdentity<Customer, IdentityRole>()
             .AddEntityFrameworkStores<BakeAtlasDbContext>()
@@ -28,7 +24,12 @@ builder.Services.AddIdentity<Customer, IdentityRole>()
 
 builder.Services.AddDbContext<BakeAtlasDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IBakeryProductService, BakeryProductService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

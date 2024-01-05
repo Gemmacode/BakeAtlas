@@ -8,25 +8,10 @@ namespace BakeAtlas.Application.ServicesImplementation
     {
        
         private readonly IUnitOfWork _unitOfWork;
-        //private readonly IBakeryProductRepository _repository;
 
-        public BakeryProductService(IUnitOfWork unitOfWork /* IBakeryProductRepository repository*/)
+        public BakeryProductService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            //_repository = repository;
-        }
-
-        public List<BakeryProduct> GetAllProducts()
-        {
-
-            return _unitOfWork.BakeryProductRepository.GetAllAsync();
-            
-        }
-
-        public BakeryProduct GetProductById(string productId)
-        {
-
-            return _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);
         }
 
         public void AddProduct(BakeryProductDTO product)
@@ -47,10 +32,41 @@ namespace BakeAtlas.Application.ServicesImplementation
             _unitOfWork.SaveChanges();
         }
 
-        public void UpdateProduct(BakeryProductDTO product)
+        public List<BakeryProduct> GetAllProducts()
         {
-            
-                
+            return _unitOfWork.BakeryProductRepository.GetAllAsync();
+        }
+
+        public BakeryProduct GetProductById(string productId)
+        {
+            return _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);
+        }
+
+        public void UpdateProduct(string productId, BakeryProductDTO product)
+        {
+            if (string.IsNullOrWhiteSpace(productId))
+            {
+                throw new ArgumentNullException("Product Id is required");
+            }
+
+            var existingProduct = _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);
+
+            if (existingProduct == null)
+            {
+                throw new Exception("Product not found");
+            }
+
+            // Update the properties of the existing product
+            existingProduct.ProductName = product.ProductName;
+            existingProduct.ProductDescription = product.ProductDescription;
+            existingProduct.ProductPrice = product.ProductPrice;
+            existingProduct.ProductQuantity = product.ProductQuantity;
+            existingProduct.ProductDiscount = product.ProductDiscount;
+            existingProduct.ingredients = product.ingredients;
+            existingProduct.UpdatedAt = DateTime.UtcNow;
+
+            _unitOfWork.BakeryProductRepository.UpdateBakeryProductAsync(existingProduct);
+            _unitOfWork.SaveChanges();
         }
 
         public void DeleteProduct(string productId)

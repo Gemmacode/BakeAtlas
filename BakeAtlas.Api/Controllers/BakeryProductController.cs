@@ -38,9 +38,9 @@ namespace BakeAtlas.Api.Controllers
         }
         
         [HttpPut("Update-Product")]
-        public IActionResult UpdateProduct(BakeryProductDTO product)
+        public IActionResult UpdateProduct(string productId, BakeryProductDTO product)
         {
-            _productService.UpdateProduct(product);
+            _productService.UpdateProduct(productId, product);
             return Ok(product);
         }
 

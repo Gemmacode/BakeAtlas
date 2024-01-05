@@ -8,6 +8,6 @@ namespace BakeAtlas.Application.Interface.Services
         void DeleteProduct(string productId);
         List<BakeryProduct> GetAllProducts();
         BakeryProduct GetProductById(string productId);
-        void UpdateProduct(BakeryProductDTO product);
+        void UpdateProduct(string productId, BakeryProductDTO product);
     }
 }

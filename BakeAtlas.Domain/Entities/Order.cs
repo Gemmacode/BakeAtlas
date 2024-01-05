@@ -11,9 +11,8 @@ namespace BakeAtlas.Domain.Entities
         public string CustomerFullName { get; set; }
         public string Description { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-        public List<BakeryProduct> products { get; set; }
+        public List<BakeryProduct> Products { get; set; }
 
     
-
     }
 }
