@@ -1,3 +1,4 @@
+using BakeAtlas.Api.MapperProfile;
 using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Application.ServicesImplementation;
@@ -33,6 +34,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 
 var app = builder.Build();
 

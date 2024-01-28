@@ -48,7 +48,7 @@ namespace BakeAtlas.Api.Controllers
         public IActionResult DeleteProduct(string id)
         {
             _productService.DeleteProduct(id);
-            return Ok();
+            return Ok("Product Deleted Successfully");
         }
     }
 }

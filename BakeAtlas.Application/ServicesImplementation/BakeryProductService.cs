@@ -1,33 +1,30 @@
-﻿using BakeAtlas.Application.Interface.Repositories;
+﻿using AutoMapper;
+using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
+using System;
+using System.Collections.Generic;
 
 namespace BakeAtlas.Application.ServicesImplementation
 {
     public class BakeryProductService : IBakeryProductService
     {
-       
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public BakeryProductService(IUnitOfWork unitOfWork)
+        public BakeryProductService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void AddProduct(BakeryProductDTO product)
         {
-            var prod = new BakeryProduct
-            {
-                Id = Guid.NewGuid().ToString(),
-                ProductName=product.ProductName,
-                ProductDescription=product.ProductDescription,
-                ProductPrice=product.ProductPrice,
-                ProductQuantity=product.ProductQuantity,
-                ProductDiscount=product.ProductDiscount,
-                ingredients=product.ingredients,
-                UpdatedAt=DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow
-            };
+            var prod = _mapper.Map<BakeryProductDTO, BakeryProduct>(product);
+            prod.Id = Guid.NewGuid().ToString();
+            prod.UpdatedAt = DateTime.UtcNow;
+            prod.CreatedAt = DateTime.UtcNow;
+
             _unitOfWork.BakeryProductRepository.AddBakeryProductAsync(prod);
             _unitOfWork.SaveChanges();
         }
@@ -56,13 +53,7 @@ namespace BakeAtlas.Application.ServicesImplementation
                 throw new Exception("Product not found");
             }
 
-            // Update the properties of the existing product
-            existingProduct.ProductName = product.ProductName;
-            existingProduct.ProductDescription = product.ProductDescription;
-            existingProduct.ProductPrice = product.ProductPrice;
-            existingProduct.ProductQuantity = product.ProductQuantity;
-            existingProduct.ProductDiscount = product.ProductDiscount;
-            existingProduct.ingredients = product.ingredients;
+            _mapper.Map(product, existingProduct);
             existingProduct.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.BakeryProductRepository.UpdateBakeryProductAsync(existingProduct);
@@ -71,16 +62,19 @@ namespace BakeAtlas.Application.ServicesImplementation
 
         public void DeleteProduct(string productId)
         {
-            if (string.IsNullOrWhiteSpace(productId)) 
+            if (string.IsNullOrWhiteSpace(productId))
             {
-                throw new ArgumentNullException ("Product Id is required");
-            };
+                throw new ArgumentNullException("Product Id is required");
+            }
+
             var product = _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);
+
             if (product == null)
             {
-                throw new Exception("Product not found");
+                throw new Exception($"Product with Id {productId} not found");
             }
-            _unitOfWork.BakeryProductRepository.DeleteBakeryProductAsync (product);
+
+            _unitOfWork.BakeryProductRepository.DeleteBakeryProductAsync(product);
             _unitOfWork.SaveChanges();
         }
     }
