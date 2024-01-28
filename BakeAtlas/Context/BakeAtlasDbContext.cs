@@ -18,5 +18,6 @@ namespace BakeAtlas.Persistence.Context
 
         public DbSet<Order> Orders { get; set; } 
         public DbSet<BakeryProduct> BakeryProducts { get; set;}
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
