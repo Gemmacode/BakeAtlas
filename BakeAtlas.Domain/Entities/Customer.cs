@@ -14,8 +14,9 @@ namespace BakeAtlas.Domain.Entities
         public string Address { get; set; }
         public string ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
+        // Navigation property for Orders
+        public List<Order> Orders { get; set; }
     }
 }

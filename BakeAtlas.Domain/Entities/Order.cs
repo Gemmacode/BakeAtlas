@@ -8,11 +8,15 @@ namespace BakeAtlas.Domain.Entities
 {
     public class Order : BaseEntity
     {
-        public string CustomerFullName { get; set; }
+        public string CustomerId { get; set; }
+        public Customer Customer { get; set; }
+
         public string Description { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-        public List<BakeryProduct> Products { get; set; }
 
-    
+        // Navigation property for OrderItems
+        public List<OrderItem> OrderItems { get; set; }
+
+
     }
 }

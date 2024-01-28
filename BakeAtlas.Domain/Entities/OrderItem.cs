@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace BakeAtlas.Domain.Entities
 {
-    internal class OrderItem
+    public class OrderItem
     {
+        public string OrderId { get; set; }
+        public Order Order { get; set; }
+
+        public string BakeryProductId { get; set; }
+        public BakeryProduct BakeryProduct { get; set; }
+
+        public int Quantity { get; set; }
     }
 }

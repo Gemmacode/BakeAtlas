@@ -16,12 +16,33 @@
             Data = data;
             Errors = errors;
         }
+
+        public ApiResponse(T data, string message = null, int statusCode = 200)
+        {
+            Succeeded = true;
+            Message = message;
+            Data = data;
+            StatusCode = statusCode;
+        }
+
+        // Constructor for failed responses with errors
+        //added
+        public ApiResponse(List<string> errors, string message = null, int statusCode = 400)
+        {
+            Succeeded = false;
+            Message = message;
+            Errors = errors;
+            StatusCode = statusCode;
+        }
+
         public ApiResponse(bool isSucceeded, int statusCode, string message)
         {
             Succeeded = isSucceeded;
             Message = message;
             StatusCode = statusCode;
         }
+
+        //ended
         public ApiResponse(T data, string message = null)
         {
             Succeeded = true;

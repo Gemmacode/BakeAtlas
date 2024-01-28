@@ -1,7 +1,8 @@
-﻿using BakeAtlas.Application.Interface.Services;
+﻿using AutoMapper;
+using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace BakeAtlas.Api.Controllers
 {
@@ -10,46 +11,47 @@ namespace BakeAtlas.Api.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly IMapper _mapper;
 
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, IMapper mapper)
         {
-            _customerService = customerService;
+            _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-
 
         [HttpPost("Add-Customer")]
-        public IActionResult AddCustomer(CustomerDTO customer)
+        public IActionResult AddCustomer([FromBody] CustomerDTO customerDto)
         {
-            _customerService.AddCustomer(customer);
-            return Ok("Customer Added Successfully");
+            _customerService.AddCustomer(customerDto);
+            return Ok("Customer added successfully");
         }
 
-        [HttpGet("Get-Customer")]
-        public IActionResult GetAllCustomer()
+        [HttpGet("Get-All-Customers")]
+        public IActionResult GetAllCustomers()
         {
-            var customers = _customerService.GetAllCustomer();
+            var customers = _customerService.GetAllCustomers();
             return Ok(customers);
         }
 
         [HttpGet("Get-Customer-By-Id")]
-        public IActionResult GetCustomer(string id)
+        public IActionResult GetCustomerById(string id)
         {
             var customer = _customerService.GetCustomerById(id);
             return Ok(customer);
         }
 
         [HttpPut("Update-Customer")]
-        public IActionResult UpdateCustomer(string customerId, CustomerDTO customer)
+        public IActionResult UpdateCustomer(string customerId, [FromBody] CustomerDTO customerDto)
         {
-            _customerService.UpdateCustomer(customerId, customer);
+            _customerService.UpdateCustomer(customerId, customerDto);
             return Ok("Customer updated successfully");
         }
 
         [HttpDelete("Delete-Customer")]
-        public IActionResult DeleteCustomerId(string id)
+        public IActionResult DeleteCustomer(string id)
         {
-            _customerService.DeleteCustomer(id);  
-            return Ok("Customer Deleted Successful");
+            _customerService.DeleteCustomer(id);
+            return Ok("Customer deleted successfully");
         }
     }
 }

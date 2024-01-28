@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BakeAtlas.Application.DTO
 {
-    internal class OrderItemDTO
+    public class OrderItemDTO
     {
+        public string BakeryProductId { get; set; }
+        public int Quantity { get; set; }
     }
 }

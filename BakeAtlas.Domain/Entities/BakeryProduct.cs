@@ -13,7 +13,10 @@ namespace BakeAtlas.Domain.Entities
         public decimal ProductPrice { get; set; }
         public decimal ProductQuantity { get; set; }
         public decimal ProductDiscount { get; set; }
-        public string ingredients { get; set;}
+        public string Ingredients { get; set; }
+
+        // Navigation property for Orders
+        public List<OrderItem> OrderItems { get; set; }
 
     }
 }

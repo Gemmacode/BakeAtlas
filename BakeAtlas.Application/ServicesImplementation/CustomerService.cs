@@ -1,36 +1,31 @@
-﻿using BakeAtlas.Application.Interface.Repositories;
+﻿using AutoMapper;
+using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BakeAtlas.Application.ServicesImplementation
 {
     public class CustomerService : ICustomerService
     {
-        private readonly IUnitOfWork _unitOfWork;
 
-        public CustomerService(IUnitOfWork unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public void AddCustomer(CustomerDTO customer)
+        public void AddCustomer(CustomerDTO customerDto)
         {
-            var cus = new Customer
-            {
-                Id = Guid.NewGuid().ToString(),
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                Email = customer.Email,
-                PhoneNumber = customer.PhoneNumber,
-                UpdatedAt = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow
-            };
-            _unitOfWork.CustomerRepository.AddCustomerAsync(cus);
+            var customer = _mapper.Map<Customer>(customerDto);
+
+            customer.Id = Guid.NewGuid().ToString();
+            customer.UpdatedAt = DateTime.UtcNow;
+            customer.CreatedAt = DateTime.UtcNow;
+
+            _unitOfWork.CustomerRepository.AddCustomerAsync(customer);
             _unitOfWork.SaveChanges();
         }
 
@@ -38,18 +33,21 @@ namespace BakeAtlas.Application.ServicesImplementation
         {
             if (string.IsNullOrWhiteSpace(customerId))
             {
-                throw new ArgumentNullException("Customer Id is required");
+                throw new ArgumentNullException(nameof(customerId), "Customer Id is required");
             }
-            var customer = _unitOfWork.CustomerRepository.GetCustomerById(customerId);  
+
+            var customer = _unitOfWork.CustomerRepository.GetCustomerById(customerId);
+
             if (customer == null)
             {
                 throw new Exception("Customer not found");
             }
+
             _unitOfWork.CustomerRepository.DeleteCustomerAsync(customer);
             _unitOfWork.SaveChanges();
         }
 
-        public List<Customer> GetAllCustomer()
+        public List<Customer> GetAllCustomers()
         {
             return _unitOfWork.CustomerRepository.GetCustomersAsync();
         }
@@ -59,26 +57,27 @@ namespace BakeAtlas.Application.ServicesImplementation
             return _unitOfWork.CustomerRepository.GetCustomerById(customerId);
         }
 
-        public void UpdateCustomer(string customerid, CustomerDTO customer)
+        public void UpdateCustomer(string customerId, CustomerDTO customerDto)
         {
-            if (string.IsNullOrWhiteSpace(customerid))
+            if (string.IsNullOrWhiteSpace(customerId))
             {
-                throw new ArgumentNullException("Customer Id is required");
+                throw new ArgumentNullException(nameof(customerId), "Customer Id is required");
             }
-            var existingCustomer = _unitOfWork.CustomerRepository.GetCustomerById(customerid);
-            if (customer == null)
+
+            var existingCustomer = _unitOfWork.CustomerRepository.GetCustomerById(customerId);
+
+            if (existingCustomer == null)
             {
-                throw new Exception("Customer not Found");
+                throw new Exception("Customer not found");
             }
-            existingCustomer.FirstName = customer.FirstName;
-            existingCustomer.LastName = customer.LastName;
-            existingCustomer.Email = customer.Email;
-            existingCustomer.PhoneNumber = customer.PhoneNumber;
-            existingCustomer.Address = customer.Address;
+
+            _mapper.Map(customerDto, existingCustomer);
+
             existingCustomer.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.CustomerRepository.UpdateCustomerAsync(existingCustomer);
             _unitOfWork.SaveChanges();
         }
+
     }
 }
