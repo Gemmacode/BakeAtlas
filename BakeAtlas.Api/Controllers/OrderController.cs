@@ -2,6 +2,7 @@
 using BakeAtlas.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace BakeAtlas.Api.Controllers
 {
@@ -13,43 +14,48 @@ namespace BakeAtlas.Api.Controllers
 
         public OrderController(IOrderService orderService)
         {
-            _orderService = orderService;
+            _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
         }
 
         [HttpPost("Add-Order")]
-        public IActionResult AddOrder(OrderDTO order)
+        public IActionResult AddOrder([FromBody] OrderDTO orderDto)
         {
-            _orderService.AddOrder(order);
-            return Ok("Order Added Successfully");
+            _orderService.AddOrder(orderDto);
+            return Ok("Order added successfully");
         }
 
-        [HttpGet("Get-Order")]
-        public IActionResult GetAllOrder()
+        [HttpGet("Get-All-Orders")]
+        public IActionResult GetAllOrders()
         {
-            var order = _orderService.GetAllOrder();
-            return Ok(order);
+            var orders = _orderService.GetAllOrders();
+            return Ok(orders);
         }
 
         [HttpGet("Get-Order-By-Id")]
-        public IActionResult GetOrder(string id)
+        public IActionResult GetOrderById(string id)
         {
             var order = _orderService.GetOrderById(id);
+
+            if (order == null)
+            {
+                return NotFound($"Order with Id {id} not found");
+            }
+
             return Ok(order);
         }
 
         [HttpPut("Update-Order")]
-        public IActionResult UpdateCustomer(string orderId, OrderDTO order)
+        public IActionResult UpdateOrder(string orderId, [FromBody] OrderDTO orderDto)
         {
-            _orderService.UpdateOrder(orderId, order);
+            _orderService.UpdateOrder(orderId, orderDto);
             return Ok("Order updated successfully");
         }
 
         [HttpDelete("Delete-Order")]
-        public IActionResult DeleteOrderId(string id)
+        public IActionResult DeleteOrder(string id)
         {
             _orderService.DeleteOrder(id);
-            return Ok("Order Deleted Successful");
+            return Ok("Order deleted successfully");
         }
     }
 }
-

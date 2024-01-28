@@ -8,13 +8,13 @@ namespace BakeAtlas.Application.Interface.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {
-        T GetByIdAsync(string id);
-        List<T> GetAllAsync();
-        void AddAsync(T entity);
-        void UpdateAsync(T entity);
-        void DeleteAsync(T entity);
+        Task AddAsync(T entity);
         void DeleteAllAsync(List<T> entities);
-        void SaveChangesAsync();
+        void DeleteAsync(T entity);
+        List<T> GetAllAsync();
+        T GetByIdAsync(string id);
+        Task SaveChangesAsync();
+        void UpdateAsync(T entity);
 
     }
 }

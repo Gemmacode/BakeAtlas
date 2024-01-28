@@ -2,6 +2,7 @@
 using BakeAtlas.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace BakeAtlas.Api.Controllers
 {
@@ -13,17 +14,17 @@ namespace BakeAtlas.Api.Controllers
 
         public BakeryProductController(IBakeryProductService productService)
         {
-            _productService = productService;
+            _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         }
 
         [HttpPost("Add-Product")]
-        public IActionResult AddProduct(BakeryProductDTO product)
+        public IActionResult AddProduct([FromBody] BakeryProductDTO productDto)
         {
-             _productService.AddProduct(product);
-            return Ok();
+            _productService.AddProduct(productDto);
+            return Ok("Product added successfully");
         }
 
-        [HttpGet("Get-Products")]
+        [HttpGet("Get-All-Products")]
         public IActionResult GetAllProducts()
         {
             var products = _productService.GetAllProducts();
@@ -31,24 +32,30 @@ namespace BakeAtlas.Api.Controllers
         }
 
         [HttpGet("Get-Product-By-Id")]
-        public IActionResult GetProduct(string id)
+        public IActionResult GetProductById(string id)
         {
             var product = _productService.GetProductById(id);
+
+            if (product == null)
+            {
+                return NotFound($"Product with Id {id} not found");
+            }
+
             return Ok(product);
         }
-        
+
         [HttpPut("Update-Product")]
-        public IActionResult UpdateProduct(string productId, BakeryProductDTO product)
+        public IActionResult UpdateProduct(string productId, [FromBody] BakeryProductDTO productDto)
         {
-            _productService.UpdateProduct(productId, product);
-            return Ok(product);
+            _productService.UpdateProduct(productId, productDto);
+            return Ok("Product updated successfully");
         }
 
         [HttpDelete("Delete-Product")]
         public IActionResult DeleteProduct(string id)
         {
             _productService.DeleteProduct(id);
-            return Ok("Product Deleted Successfully");
+            return Ok("Product deleted successfully");
         }
     }
 }

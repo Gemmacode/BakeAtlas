@@ -2,8 +2,6 @@
 using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
-using System;
-using System.Collections.Generic;
 
 namespace BakeAtlas.Application.ServicesImplementation
 {
@@ -14,18 +12,18 @@ namespace BakeAtlas.Application.ServicesImplementation
 
         public BakeryProductService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public void AddProduct(BakeryProductDTO product)
+        public void AddProduct(BakeryProductDTO productDto)
         {
-            var prod = _mapper.Map<BakeryProductDTO, BakeryProduct>(product);
-            prod.Id = Guid.NewGuid().ToString();
-            prod.UpdatedAt = DateTime.UtcNow;
-            prod.CreatedAt = DateTime.UtcNow;
+            var product = _mapper.Map<BakeryProduct>(productDto);
+            product.Id = Guid.NewGuid().ToString();
+            product.UpdatedAt = DateTime.UtcNow;
+            product.CreatedAt = DateTime.UtcNow;
 
-            _unitOfWork.BakeryProductRepository.AddBakeryProductAsync(prod);
+            _unitOfWork.BakeryProductRepository.AddBakeryProductAsync(product);
             _unitOfWork.SaveChanges();
         }
 
@@ -39,21 +37,21 @@ namespace BakeAtlas.Application.ServicesImplementation
             return _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);
         }
 
-        public void UpdateProduct(string productId, BakeryProductDTO product)
+        public void UpdateProduct(string productId, BakeryProductDTO productDto)
         {
             if (string.IsNullOrWhiteSpace(productId))
             {
-                throw new ArgumentNullException("Product Id is required");
+                throw new ArgumentNullException(nameof(productId), "Product Id is required");
             }
 
             var existingProduct = _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);
 
             if (existingProduct == null)
             {
-                throw new Exception("Product not found");
+                throw new Exception($"Product with Id {productId} not found");
             }
 
-            _mapper.Map(product, existingProduct);
+            _mapper.Map(productDto, existingProduct);
             existingProduct.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.BakeryProductRepository.UpdateBakeryProductAsync(existingProduct);
@@ -64,7 +62,7 @@ namespace BakeAtlas.Application.ServicesImplementation
         {
             if (string.IsNullOrWhiteSpace(productId))
             {
-                throw new ArgumentNullException("Product Id is required");
+                throw new ArgumentNullException(nameof(productId), "Product Id is required");
             }
 
             var product = _unitOfWork.BakeryProductRepository.GetBakeryProductById(productId);

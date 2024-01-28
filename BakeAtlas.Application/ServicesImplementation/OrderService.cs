@@ -1,56 +1,53 @@
-﻿using BakeAtlas.Application.Interface.Repositories;
+﻿using AutoMapper;
+using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BakeAtlas.Application.ServicesImplementation
 {
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork unitOfWork)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+
         }
 
-        public void AddOrder(OrderDTO customer)
+    
+        public void AddOrder(OrderDTO orderDto)
         {
-            var ord = new Order
-            {
-                Id = Guid.NewGuid().ToString(),
-                CustomerFullName = customer.CustomerFullName,
-                Description = customer.Description,
-                Products = customer.products,
-                OrderDate = DateTime.Now,
-                UpdatedAt = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow
-            };
-            _unitOfWork.OrderRepository.AddOrderAsync(ord);
+            var order = _mapper.Map<Order>(orderDto);
+            order.Id = Guid.NewGuid().ToString();
+            order.OrderDate = DateTime.UtcNow;
+            order.UpdatedAt = DateTime.UtcNow;
+            order.CreatedAt = DateTime.UtcNow;
+
+            _unitOfWork.OrderRepository.AddOrderAsync(order);
             _unitOfWork.SaveChanges();
-            
         }
-
         public void DeleteOrder(string orderId)
         {
             if (string.IsNullOrWhiteSpace(orderId))
             {
-                throw new ArgumentNullException("order Id is required");
-            };
+                throw new ArgumentNullException(nameof(orderId), "Order Id is required");
+            }
+
             var order = _unitOfWork.OrderRepository.GetOrderById(orderId);
+
             if (order == null)
             {
-                throw new Exception("Product not found");
+                throw new Exception($"Order with Id {orderId} not found");
             }
+
             _unitOfWork.OrderRepository.DeleteOrderAsync(order);
             _unitOfWork.SaveChanges();
         }
 
-        public List<Order> GetAllOrder()
+        public List<Order> GetAllOrders()
         {
             return _unitOfWork.OrderRepository.GetOrderAsync();
         }
@@ -60,28 +57,27 @@ namespace BakeAtlas.Application.ServicesImplementation
             return _unitOfWork.OrderRepository.GetOrderById(orderId);
         }
 
-        public void UpdateOrder(string orderid, OrderDTO order)
+        public void UpdateOrder(string orderId, OrderDTO orderDto)
         {
-            if (string.IsNullOrWhiteSpace(orderid))
+            if (string.IsNullOrWhiteSpace(orderId))
             {
-                throw new ArgumentNullException("Order Id is required");
+                throw new ArgumentNullException(nameof(orderId), "Order Id is required");
             }
 
-            var existingorder = _unitOfWork.OrderRepository.GetOrderById(orderid);
+            var existingOrder = _unitOfWork.OrderRepository.GetOrderById(orderId);
 
-            if (existingorder == null)
+            if (existingOrder == null)
             {
-                throw new Exception("Order not found");
+                throw new Exception($"Order with Id {orderId} not found");
             }
 
-            //update the properties of the existing product
-            existingorder.CustomerFullName = order.CustomerFullName; 
-            existingorder.Description = order.Description;
-            existingorder.Products = order.products;
-            existingorder.UpdatedAt = DateTime.UtcNow;
-      
-            _unitOfWork.OrderRepository.UpdateOrderAsync(GetOrderById(orderid));
+            _mapper.Map(orderDto, existingOrder);
+
+            existingOrder.UpdatedAt = DateTime.UtcNow;
+
+            _unitOfWork.OrderRepository.UpdateOrderAsync(existingOrder);
             _unitOfWork.SaveChanges();
         }
+
     }
 }

@@ -1,10 +1,8 @@
 ﻿using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BakeAtlas.Persistence.Repositories
@@ -18,7 +16,7 @@ namespace BakeAtlas.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public async void AddAsync(T entity)
+        public async Task AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
         }
@@ -35,7 +33,7 @@ namespace BakeAtlas.Persistence.Repositories
 
         public List<T> GetAllAsync()
         {
-           return _dbContext.Set<T>().ToList();
+            return _dbContext.Set<T>().ToList();
         }
 
         public T GetByIdAsync(string id)
@@ -43,9 +41,9 @@ namespace BakeAtlas.Persistence.Repositories
             return _dbContext.Set<T>().Find(id);
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public void UpdateAsync(T entity)
@@ -53,5 +51,4 @@ namespace BakeAtlas.Persistence.Repositories
             _dbContext.Set<T>().Update(entity);
         }
     }
-
 }
