@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
+using BakeAtlas.Application.DTO; 
 using BakeAtlas.Domain.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BakeAtlas.Application.ServicesImplementation
 {
@@ -14,20 +11,28 @@ namespace BakeAtlas.Application.ServicesImplementation
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public OrderItemService(IUnitOfWork unitOfWork)
+
+        public OrderItemService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public void AddOrderItem(OrderItem orderItem)
+        public void AddOrderItem(OrderItemDTO orderItemDto)
         {
+            // Map OrderItemDTO to OrderItem
+            var orderItem = _mapper.Map<OrderItem>(orderItemDto);
+
             // Add logic to handle adding 'OrderItem' to the context
             _unitOfWork.OrderItemRepository.AddAsync(orderItem);
             _unitOfWork.SaveChanges();
         }
 
-        public void UpdateOrderItem(OrderItem updatedOrderItem)
+        public void UpdateOrderItem(OrderItemDTO updatedOrderItemDto)
         {
+            // Map OrderItemDTO to OrderItem
+            var updatedOrderItem = _mapper.Map<OrderItem>(updatedOrderItemDto);
+
             // Add logic to handle updating 'OrderItem' in the context
             var existingOrderItem = _unitOfWork.OrderItemRepository.GetByIdAsync(updatedOrderItem.Id);
             if (existingOrderItem != null)
@@ -35,7 +40,8 @@ namespace BakeAtlas.Application.ServicesImplementation
                 // Update properties of existingOrderItem
                 existingOrderItem.Quantity = updatedOrderItem.Quantity;
 
-                // Save changes to the database
+                // Mark the entity as modified
+                _unitOfWork.OrderItemRepository.UpdateAsync(existingOrderItem);
                 _unitOfWork.SaveChanges();
             }
         }

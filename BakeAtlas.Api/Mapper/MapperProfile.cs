@@ -9,11 +9,14 @@ namespace BakeAtlas.Api.MapperProfile
     {
         public MapperProfile()
         {
-            CreateMap<Customer, CustomerDTO>().ReverseMap();
-            CreateMap<Order, OrderDTO>().ReverseMap();   
-            CreateMap<BakeryProduct, BakeryProductDTO>().ReverseMap();
+            CreateMap<CustomerDTO, Customer>().ReverseMap();
+            CreateMap<BakeryProductDTO, BakeryProduct>().ReverseMap();
+            CreateMap<OrderItemDTO, OrderItem>().ReverseMap();
             CreateMap<OrderItemDTO, OrderItem>().ReverseMap();
 
+            CreateMap<OrderDTO, Order>()
+                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
+                .ReverseMap();
         }
     }
 }

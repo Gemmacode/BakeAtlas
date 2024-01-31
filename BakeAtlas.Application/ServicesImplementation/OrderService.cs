@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using BakeAtlas.Application.DTO;
 using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
+using System;
+using System.Collections.Generic;
 
 namespace BakeAtlas.Application.ServicesImplementation
 {
@@ -14,10 +17,8 @@ namespace BakeAtlas.Application.ServicesImplementation
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-
         }
 
-    
         public void AddOrder(OrderDTO orderDto)
         {
             var order = _mapper.Map<Order>(orderDto);
@@ -26,9 +27,16 @@ namespace BakeAtlas.Application.ServicesImplementation
             order.UpdatedAt = DateTime.UtcNow;
             order.CreatedAt = DateTime.UtcNow;
 
+            foreach (var itemDto in orderDto.OrderItems)
+            {
+                var orderItem = _mapper.Map<OrderItem>(itemDto);
+                order.OrderItems.Add(orderItem);
+            }
+
             _unitOfWork.OrderRepository.AddOrderAsync(order);
             _unitOfWork.SaveChanges();
         }
+
         public void DeleteOrder(string orderId)
         {
             if (string.IsNullOrWhiteSpace(orderId))
@@ -78,6 +86,5 @@ namespace BakeAtlas.Application.ServicesImplementation
             _unitOfWork.OrderRepository.UpdateOrderAsync(existingOrder);
             _unitOfWork.SaveChanges();
         }
-
     }
 }

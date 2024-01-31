@@ -1,4 +1,5 @@
-﻿using BakeAtlas.Domain.Entities;
+﻿using BakeAtlas.Application.DTO;
+using BakeAtlas.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace BakeAtlas.Application.Interface.Services
 {
     public interface IOrderItemService
     {
-        void AddOrderItem(OrderItem orderItem);
-        void UpdateOrderItem(OrderItem updatedOrderItem);
+        void AddOrderItem(OrderItemDTO orderItemDto);
+        void UpdateOrderItem(OrderItemDTO updatedOrderItemDto);
     }
 }
