@@ -7,15 +7,20 @@ using System.Threading.Tasks;
 
 namespace BakeAtlas.Domain.Entities
 {
-    public class OrderItem : BaseEntity
+    public class OrderItem:BaseEntity
     {
-        public string OrderId { get; set; }
-        [ForeignKey("OrderId")]
+        
+        //[ForeignKey("OrderId")]
         public Order Order { get; set; }
 
         public string BakeryProductId { get; set; }
         public BakeryProduct BakeryProduct { get; set; }
+        public string CustomerId { get; set; }
+        public Customer Customer { get; set; }
 
-        public int Quantity { get; set; }
+        public string Description { get; set; }
+
+        public string Quantity { get; set; }
+       
     }
 }
