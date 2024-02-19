@@ -15,25 +15,35 @@ namespace BakeAtlas.Application.ServicesImplementation
 
         public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void AddOrder(OrderDTO orderDto)
         {
-            var order = _mapper.Map<Order>(orderDto);
-            order.Id = Guid.NewGuid().ToString();
+            // Generate a unique order ID
+            string orderId = Guid.NewGuid().ToString();
+
+            // Map DTO to entity
+            Order order = _mapper.Map<Order>(orderDto);
+            order.Id = orderId;
             order.OrderDate = DateTime.UtcNow;
-            order.UpdatedAt = DateTime.UtcNow;
-            order.CreatedAt = DateTime.UtcNow;
 
-            foreach (var itemDto in orderDto.OrderItems)
-            {
-                var orderItem = _mapper.Map<OrderItem>(itemDto);
-                order.OrderItems.Add(orderItem);
-            }
-
+            // Add order to the database
             _unitOfWork.OrderRepository.AddOrderAsync(order);
+            _unitOfWork.SaveChanges();
+        }
+
+        public void AddOrderItemToOrder(string orderId, OrderItemDTO orderItemDto)
+        {
+            Order order = GetOrderById(orderId);
+
+            OrderItem orderItem = _mapper.Map<OrderItem>(orderItemDto);
+            orderItem.OrderId = orderId;
+
+            order.OrderItems ??= new List<OrderItem>();
+            order.OrderItems.Add(orderItem);
+
             _unitOfWork.SaveChanges();
         }
 
@@ -44,12 +54,7 @@ namespace BakeAtlas.Application.ServicesImplementation
                 throw new ArgumentNullException(nameof(orderId), "Order Id is required");
             }
 
-            var order = _unitOfWork.OrderRepository.GetOrderById(orderId);
-
-            if (order == null)
-            {
-                throw new Exception($"Order with Id {orderId} not found");
-            }
+            var order = GetOrderById(orderId);
 
             _unitOfWork.OrderRepository.DeleteOrderAsync(order);
             _unitOfWork.SaveChanges();
@@ -62,7 +67,14 @@ namespace BakeAtlas.Application.ServicesImplementation
 
         public Order GetOrderById(string orderId)
         {
-            return _unitOfWork.OrderRepository.GetOrderById(orderId);
+            Order order = _unitOfWork.OrderRepository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                throw new Exception($"Order with Id {orderId} not found");
+            }
+
+            return order;
         }
 
         public void UpdateOrder(string orderId, OrderDTO orderDto)
@@ -72,12 +84,7 @@ namespace BakeAtlas.Application.ServicesImplementation
                 throw new ArgumentNullException(nameof(orderId), "Order Id is required");
             }
 
-            var existingOrder = _unitOfWork.OrderRepository.GetOrderById(orderId);
-
-            if (existingOrder == null)
-            {
-                throw new Exception($"Order with Id {orderId} not found");
-            }
+            var existingOrder = GetOrderById(orderId);
 
             _mapper.Map(orderDto, existingOrder);
 
@@ -86,5 +93,17 @@ namespace BakeAtlas.Application.ServicesImplementation
             _unitOfWork.OrderRepository.UpdateOrderAsync(existingOrder);
             _unitOfWork.SaveChanges();
         }
+
+        //private Order GetOrderById(string orderId)
+        //{
+        //    Order order = _unitOfWork.OrderRepository.GetOrderById(orderId);
+
+        //    if (order == null)
+        //    {
+        //        throw new Exception($"Order with ID {orderId} not found");
+        //    }
+
+        //    return order;
+        //}
     }
 }

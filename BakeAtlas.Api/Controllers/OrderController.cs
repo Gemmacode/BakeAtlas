@@ -1,4 +1,5 @@
-﻿using BakeAtlas.Application.Interface.Services;
+﻿using BakeAtlas.Application.DTO;
+using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,18 @@ namespace BakeAtlas.Api.Controllers
         {
             _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
         }
-
         [HttpPost("Add-Order")]
-        public IActionResult AddOrder([FromBody] OrderDTO orderDto)
+        public IActionResult AddOrder(OrderDTO orderDto)
         {
-            _orderService.AddOrder(orderDto);
+            _orderService.AddOrder(orderDto);   
             return Ok("Order added successfully");
+        }
+
+        [HttpPost("Add-OrderItem")]
+        public IActionResult AddOrderItemToOrder(string orderId, OrderItemDTO orderItemDto)
+        {
+            _orderService.AddOrderItemToOrder(orderId, orderItemDto);
+            return Ok("OrderItem added successfully");
         }
 
         [HttpGet("Get-All-Orders")]
