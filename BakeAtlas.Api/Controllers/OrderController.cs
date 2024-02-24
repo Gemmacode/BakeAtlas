@@ -24,12 +24,12 @@ namespace BakeAtlas.Api.Controllers
             return Ok("Order added successfully");
         }
 
-        [HttpPost("Add-OrderItem")]
-        public IActionResult AddOrderItemToOrder(string orderId, OrderItemDTO orderItemDto)
-        {
-            _orderService.AddOrderItemToOrder(orderId, orderItemDto);
-            return Ok("OrderItem added successfully");
-        }
+        //[HttpPost("Add-OrderItem")]
+        //public IActionResult AddOrderItemToOrder(string orderId, OrderItemDTO orderItemDto)
+        //{
+        //    _orderService.AddOrderItemToOrder(orderId, orderItemDto);
+        //    return Ok("OrderItem added successfully");
+        //}
 
         [HttpGet("Get-All-Orders")]
         public IActionResult GetAllOrders()

@@ -19,34 +19,43 @@ namespace BakeAtlas.Application.ServicesImplementation
             _mapper = mapper;
         }
 
-        public void AddOrder(OrderDTO orderDto)
-        {
-            // Generate a unique order ID
-            string orderId = Guid.NewGuid().ToString();
+        //public void AddOrder(OrderDTO orderDto)
+        //{
+        //    // Generate a unique order ID
+        //    string orderId = Guid.NewGuid().ToString();
 
-            // Map DTO to entity
-            Order order = _mapper.Map<Order>(orderDto);
-            order.Id = orderId;
-            order.OrderDate = DateTime.UtcNow;
+        //    // Map DTO to entity
+        //    Order order = _mapper.Map<Order>(orderDto);
+        //    order.Id = orderId;
+        //    order.OrderDate = DateTime.UtcNow;
 
-            // Add order to the database
-            _unitOfWork.OrderRepository.AddOrderAsync(order);
-            _unitOfWork.SaveChanges();
-        }
+        //    // Add order to the database
+        //    _unitOfWork.OrderRepository.AddOrderAsync(order);
+        //    _unitOfWork.SaveChanges();
 
-        public void AddOrderItemToOrder(string orderId, OrderItemDTO orderItemDto)
-        {
-            Order order = GetOrderById(orderId);
+        //    // Add order items to the order
+        //    foreach (var orderItemDto in orderDto.OrderItems)
+        //    {
+        //        AddOrderItemToOrder(orderId, orderItemDto);
+        //    }
+        //}
 
-            OrderItem orderItem = _mapper.Map<OrderItem>(orderItemDto);
-            orderItem.OrderId = orderId;
+        //public void AddOrderItemToOrder(string orderId, OrderItemDTO orderItemDto)
+        //{
+        //    // Retrieve the order or throw an exception if not found
+        //    Order order = GetOrderById(orderId);
 
-            order.OrderItems ??= new List<OrderItem>();
-            order.OrderItems.Add(orderItem);
+        //    // Map DTO to entity
+        //    OrderItem orderItem = _mapper.Map<OrderItem>(orderItemDto);
+        //    orderItem.OrderId = orderId; // Assign the order ID
 
-            _unitOfWork.SaveChanges();
-        }
+        //    // Add the order item to the order
+        //    order.OrderItems ??= new List<OrderItem>();
+        //    order.OrderItems.Add(orderItem);
 
+        //    // Save changes
+        //    _unitOfWork.SaveChanges();
+        //}
         public void DeleteOrder(string orderId)
         {
             if (string.IsNullOrWhiteSpace(orderId))
@@ -59,7 +68,28 @@ namespace BakeAtlas.Application.ServicesImplementation
             _unitOfWork.OrderRepository.DeleteOrderAsync(order);
             _unitOfWork.SaveChanges();
         }
+        public void AddOrder(OrderDTO orderDto)
+        {
+            // Generate a unique order ID
+            string orderId = Guid.NewGuid().ToString();
 
+            // Map DTO to entity
+            Order order = _mapper.Map<Order>(orderDto);
+            order.Id = orderId;
+            order.OrderDate = DateTime.UtcNow;
+
+            // Map order items DTO to entities and add them to the order
+            order.OrderItems = orderDto.OrderItems.Select(itemDto =>
+            {
+                var orderItem = _mapper.Map<OrderItem>(itemDto);
+                orderItem.OrderId = orderId;
+                return orderItem;
+            }).ToList();
+
+            // Add order to the database
+            _unitOfWork.OrderRepository.AddOrderAsync(order);
+            _unitOfWork.SaveChanges();
+        }
         public List<Order> GetAllOrders()
         {
             return _unitOfWork.OrderRepository.GetOrderAsync();
