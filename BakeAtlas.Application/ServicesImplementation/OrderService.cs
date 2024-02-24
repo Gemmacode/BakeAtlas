@@ -60,12 +60,23 @@ namespace BakeAtlas.Application.ServicesImplementation
                 orderItem.OrderId = orderId;
                 order.OrderItems.Add(orderItem);
 
-                // Update product quantities
+                // Validate and update product quantities
                 var product = _unitOfWork.BakeryProductRepository.GetBakeryProductById(orderItemDto.BakeryProductId);
                 if (product != null)
                 {
-                    product.ProductQuantity -= orderItemDto.Quantity; // Deduct sold quantity from available quantity
-                    productsToUpdate.Add(product);
+                    if (product.ProductQuantity >= orderItemDto.Quantity) // Sufficient quantity available
+                    {
+                        product.ProductQuantity -= orderItemDto.Quantity; // Deduct sold quantity from available quantity
+                        productsToUpdate.Add(product);
+                    }
+                    else
+                    {
+                        throw new Exception($"Insufficient quantity available for product: {product.ProductName}");
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Product not found: {orderItemDto.BakeryProductId}");
                 }
             }
 
@@ -81,7 +92,7 @@ namespace BakeAtlas.Application.ServicesImplementation
             // Save changes
             _unitOfWork.SaveChanges();
         }
-        public List<Order> GetAllOrders()
+            public List<Order> GetAllOrders()
         {
             return _unitOfWork.OrderRepository.GetOrderAsync();
         }
