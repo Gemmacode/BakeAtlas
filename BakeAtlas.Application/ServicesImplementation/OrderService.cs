@@ -71,12 +71,12 @@ namespace BakeAtlas.Application.ServicesImplementation
                     }
                     else
                     {
-                        throw new Exception($"Insufficient quantity available for product: {product.ProductName}");
+                        throw new InvalidOperationException($"Insufficient quantity available for product: {product.ProductName}");
                     }
                 }
                 else
                 {
-                    throw new Exception($"Product not found: {orderItemDto.BakeryProductId}");
+                    throw new InvalidOperationException($"Product not found: {orderItemDto.BakeryProductId}");
                 }
             }
 
