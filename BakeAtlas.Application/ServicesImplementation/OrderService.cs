@@ -19,6 +19,29 @@ namespace BakeAtlas.Application.ServicesImplementation
             _mapper = mapper;
         }
 
+        //public void AddOrder(OrderDTO orderDto)
+        //{
+        //    // Generate a unique order ID
+        //    string orderId = Guid.NewGuid().ToString();
+
+        //    // Map DTO to entity
+        //    Order order = _mapper.Map<Order>(orderDto);
+        //    order.Id = orderId;
+        //    order.OrderDate = DateTime.UtcNow;
+
+        //    // Map order items DTO to entities and add them to the order
+        //    order.OrderItems = orderDto.OrderItems.Select(itemDto =>
+        //    {
+        //        var orderItem = _mapper.Map<OrderItem>(itemDto);
+        //        orderItem.OrderId = orderId;
+        //        return orderItem;
+        //    }).ToList();
+
+        //    // Add order to the database
+        //    _unitOfWork.OrderRepository.AddOrderAsync(order);
+        //    _unitOfWork.SaveChanges();
+        //}
+
         public void AddOrder(OrderDTO orderDto)
         {
             // Generate a unique order ID
@@ -30,15 +53,32 @@ namespace BakeAtlas.Application.ServicesImplementation
             order.OrderDate = DateTime.UtcNow;
 
             // Map order items DTO to entities and add them to the order
-            order.OrderItems = orderDto.OrderItems.Select(itemDto =>
+            List<BakeryProduct> productsToUpdate = new List<BakeryProduct>(); // To track products for quantity update
+            foreach (var orderItemDto in orderDto.OrderItems)
             {
-                var orderItem = _mapper.Map<OrderItem>(itemDto);
+                var orderItem = _mapper.Map<OrderItem>(orderItemDto);
                 orderItem.OrderId = orderId;
-                return orderItem;
-            }).ToList();
+                order.OrderItems.Add(orderItem);
+
+                // Update product quantities
+                var product = _unitOfWork.BakeryProductRepository.GetBakeryProductById(orderItemDto.BakeryProductId);
+                if (product != null)
+                {
+                    product.ProductQuantity -= orderItemDto.Quantity; // Deduct sold quantity from available quantity
+                    productsToUpdate.Add(product);
+                }
+            }
 
             // Add order to the database
             _unitOfWork.OrderRepository.AddOrderAsync(order);
+
+            // Update product quantities in the database
+            foreach (var product in productsToUpdate)
+            {
+                _unitOfWork.BakeryProductRepository.UpdateBakeryProductAsync(product);
+            }
+
+            // Save changes
             _unitOfWork.SaveChanges();
         }
         public List<Order> GetAllOrders()
