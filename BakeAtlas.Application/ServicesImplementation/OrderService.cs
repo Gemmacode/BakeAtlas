@@ -19,55 +19,6 @@ namespace BakeAtlas.Application.ServicesImplementation
             _mapper = mapper;
         }
 
-        //public void AddOrder(OrderDTO orderDto)
-        //{
-        //    // Generate a unique order ID
-        //    string orderId = Guid.NewGuid().ToString();
-
-        //    // Map DTO to entity
-        //    Order order = _mapper.Map<Order>(orderDto);
-        //    order.Id = orderId;
-        //    order.OrderDate = DateTime.UtcNow;
-
-        //    // Add order to the database
-        //    _unitOfWork.OrderRepository.AddOrderAsync(order);
-        //    _unitOfWork.SaveChanges();
-
-        //    // Add order items to the order
-        //    foreach (var orderItemDto in orderDto.OrderItems)
-        //    {
-        //        AddOrderItemToOrder(orderId, orderItemDto);
-        //    }
-        //}
-
-        //public void AddOrderItemToOrder(string orderId, OrderItemDTO orderItemDto)
-        //{
-        //    // Retrieve the order or throw an exception if not found
-        //    Order order = GetOrderById(orderId);
-
-        //    // Map DTO to entity
-        //    OrderItem orderItem = _mapper.Map<OrderItem>(orderItemDto);
-        //    orderItem.OrderId = orderId; // Assign the order ID
-
-        //    // Add the order item to the order
-        //    order.OrderItems ??= new List<OrderItem>();
-        //    order.OrderItems.Add(orderItem);
-
-        //    // Save changes
-        //    _unitOfWork.SaveChanges();
-        //}
-        public void DeleteOrder(string orderId)
-        {
-            if (string.IsNullOrWhiteSpace(orderId))
-            {
-                throw new ArgumentNullException(nameof(orderId), "Order Id is required");
-            }
-
-            var order = GetOrderById(orderId);
-
-            _unitOfWork.OrderRepository.DeleteOrderAsync(order);
-            _unitOfWork.SaveChanges();
-        }
         public void AddOrder(OrderDTO orderDto)
         {
             // Generate a unique order ID
@@ -124,16 +75,19 @@ namespace BakeAtlas.Application.ServicesImplementation
             _unitOfWork.SaveChanges();
         }
 
-        //private Order GetOrderById(string orderId)
-        //{
-        //    Order order = _unitOfWork.OrderRepository.GetOrderById(orderId);
+        public void DeleteOrder(string orderId)
+        {
+            if (string.IsNullOrWhiteSpace(orderId))
+            {
+                throw new ArgumentNullException(nameof(orderId), "Order Id is required");
+            }
 
-        //    if (order == null)
-        //    {
-        //        throw new Exception($"Order with ID {orderId} not found");
-        //    }
+            var order = GetOrderById(orderId);
 
-        //    return order;
-        //}
+            _unitOfWork.OrderRepository.DeleteOrderAsync(order);
+            _unitOfWork.SaveChanges();
+        }
+       
+       
     }
 }
