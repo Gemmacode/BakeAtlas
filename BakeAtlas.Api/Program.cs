@@ -26,6 +26,7 @@ builder.Services.AddIdentity<Customer, IdentityRole>()
 builder.Services.AddDbContext<BakeAtlasDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHttpClient<RapidApiService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IBakeryProductService, BakeryProductService>();
