@@ -1,7 +1,5 @@
-﻿using BakeAtlas.Application.DTO;
-using BakeAtlas.Application.Interface.Services;
+﻿using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

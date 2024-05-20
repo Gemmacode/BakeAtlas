@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using BakeAtlas.Application.DTO;
 using BakeAtlas.Application.Interface.Repositories;
 using BakeAtlas.Application.Interface.Services;
 using BakeAtlas.Domain.Entities;
-using System;
-using System.Collections.Generic;
 
 namespace BakeAtlas.Application.ServicesImplementation
 {
@@ -50,45 +47,11 @@ namespace BakeAtlas.Application.ServicesImplementation
             // Map DTO to entity
             Order order = _mapper.Map<Order>(orderDto);
             order.Id = orderId;
-            order.OrderDate = DateTime.UtcNow;
+            order.CreatedAt = DateTime.UtcNow;        
+           
 
-            // Map order items DTO to entities and add them to the order
-            List<BakeryProduct> productsToUpdate = new List<BakeryProduct>(); // To track products for quantity update
-            foreach (var orderItemDto in orderDto.OrderItems)
-            {
-                var orderItem = _mapper.Map<OrderItem>(orderItemDto);
-                orderItem.OrderId = orderId;
-                order.OrderItems.Add(orderItem);
-
-                // Validate and update product quantities
-                var product = _unitOfWork.BakeryProductRepository.GetBakeryProductById(orderItemDto.BakeryProductId);
-                if (product != null)
-                {
-                    if (product.ProductQuantity >= orderItemDto.Quantity) // Sufficient quantity available
-                    {
-                        product.ProductQuantity -= orderItemDto.Quantity; // Deduct sold quantity from available quantity
-                        productsToUpdate.Add(product);
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException($"Insufficient quantity available for product: {product.ProductName}");
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Product not found: {orderItemDto.BakeryProductId}");
-                }
-            }
-
-            // Add order to the database
             _unitOfWork.OrderRepository.AddOrderAsync(order);
-
-            // Update product quantities in the database
-            foreach (var product in productsToUpdate)
-            {
-                _unitOfWork.BakeryProductRepository.UpdateBakeryProductAsync(product);
-            }
-
+           
             // Save changes
             _unitOfWork.SaveChanges();
         }
